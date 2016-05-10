@@ -10,15 +10,15 @@ namespace DiceCalculator.Dice
 	{
 		public TestDie()
 		{
-			faces = new List<FaceMap>();
+			faceMaps = new List<FaceMap>();
 
-			faces.Add(new FaceMap(new Dictionary<Face, int>() { { Face.blank, 1 } }));
+			faceMaps.Add(new FaceMap(new Dictionary<Face, int>() { { Face.blank, 1 } }));
 
-			faces.Add(new FaceMap(new Dictionary<Face, int>() { { Face.success, 1 } }));
+			faceMaps.Add(new FaceMap(new Dictionary<Face, int>() { { Face.success, 1 } }));
 
-			faces.Add(new FaceMap(new Dictionary<Face, int>() { { Face.success, 2 } }));
+			faceMaps.Add(new FaceMap(new Dictionary<Face, int>() { { Face.success, 2 } }));
 
-			faces.Add(new FaceMap(new Dictionary<Face, int>() { { Face.blank, 2 } }));
+			faceMaps.Add(new FaceMap(new Dictionary<Face, int>() { { Face.blank, 2 } }));
 
 		}
 	}

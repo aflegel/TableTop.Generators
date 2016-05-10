@@ -10,31 +10,31 @@ namespace DiceCalculator.Dice
 	{
 		public Force()
 		{
-			faces = new List<FaceMap>();
+			faceMaps = new List<FaceMap>();
 
-			faces.Add(new FaceMap(new Dictionary<Face, int>() { { Face.dark, 1 } }));
+			faceMaps.Add(new FaceMap(new Dictionary<Face, int>() { { Face.dark, 1 } }));
 
-			faces.Add(new FaceMap(new Dictionary<Face, int>() { { Face.dark, 1 } }));
+			faceMaps.Add(new FaceMap(new Dictionary<Face, int>() { { Face.dark, 1 } }));
 
-			faces.Add(new FaceMap(new Dictionary<Face, int>() { { Face.dark, 1 } }));
+			faceMaps.Add(new FaceMap(new Dictionary<Face, int>() { { Face.dark, 1 } }));
 
-			faces.Add(new FaceMap(new Dictionary<Face, int>() { { Face.dark, 1 } }));
+			faceMaps.Add(new FaceMap(new Dictionary<Face, int>() { { Face.dark, 1 } }));
 
-			faces.Add(new FaceMap(new Dictionary<Face, int>() { { Face.dark, 1 } }));
+			faceMaps.Add(new FaceMap(new Dictionary<Face, int>() { { Face.dark, 1 } }));
 
-			faces.Add(new FaceMap(new Dictionary<Face, int>() { { Face.dark, 1 } }));
+			faceMaps.Add(new FaceMap(new Dictionary<Face, int>() { { Face.dark, 1 } }));
 
-			faces.Add(new FaceMap(new Dictionary<Face, int>() { { Face.dark, 2 } }));
+			faceMaps.Add(new FaceMap(new Dictionary<Face, int>() { { Face.dark, 2 } }));
 
-			faces.Add(new FaceMap(new Dictionary<Face, int>() { { Face.light, 1 } }));
+			faceMaps.Add(new FaceMap(new Dictionary<Face, int>() { { Face.light, 1 } }));
 
-			faces.Add(new FaceMap(new Dictionary<Face, int>() { { Face.light, 1 } }));
+			faceMaps.Add(new FaceMap(new Dictionary<Face, int>() { { Face.light, 1 } }));
 
-			faces.Add(new FaceMap(new Dictionary<Face, int>() { { Face.light, 2 } }));
+			faceMaps.Add(new FaceMap(new Dictionary<Face, int>() { { Face.light, 2 } }));
 
-			faces.Add(new FaceMap(new Dictionary<Face, int>() { { Face.light, 2 } }));
+			faceMaps.Add(new FaceMap(new Dictionary<Face, int>() { { Face.light, 2 } }));
 
-			faces.Add(new FaceMap(new Dictionary<Face, int>() { { Face.light, 2 } }));
+			faceMaps.Add(new FaceMap(new Dictionary<Face, int>() { { Face.light, 2 } }));
 		}
 	}
 }

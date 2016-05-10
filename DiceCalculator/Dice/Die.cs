@@ -13,7 +13,7 @@ namespace DiceCalculator.Dice
 	class Die
 	{
 
-		public List<FaceMap> faces;
+		public List<FaceMap> faceMaps;
 
 		/// <summary>
 		///
@@ -25,11 +25,11 @@ namespace DiceCalculator.Dice
 		{
 			//escape for new lists
 			if (pool.Count == 0)
-				return addition.faces;
+				return addition.faceMaps;
 
 			List<FaceMap> nextPool = new List<FaceMap>();
 
-			foreach (FaceMap dieFaces in addition.faces)
+			foreach (FaceMap dieFaces in addition.faceMaps)
 			{
 				foreach (FaceMap poolFaces in pool)
 				{
@@ -55,7 +55,7 @@ namespace DiceCalculator.Dice
 
 			foreach (Die dieFaces in pool)
 			{
-				foreach (FaceMap face in dieFaces.faces)
+				foreach (FaceMap face in dieFaces.faceMaps)
 				{
 					nextPool = face.Merge(nextPool);
 				}

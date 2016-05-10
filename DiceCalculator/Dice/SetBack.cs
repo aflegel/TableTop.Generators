@@ -11,19 +11,19 @@ namespace DiceCalculator.Dice
 
 		public SetBack()
 		{
-			faces = new List<FaceMap>();
+			faceMaps = new List<FaceMap>();
 
-			faces.Add(new FaceMap(new Dictionary<Face, int>() { { Face.blank, 1 } }));
+			faceMaps.Add(new FaceMap(new Dictionary<Face, int>() { { Face.blank, 1 } }));
 
-			faces.Add(new FaceMap(new Dictionary<Face, int>() { { Face.blank, 1 } }));
+			faceMaps.Add(new FaceMap(new Dictionary<Face, int>() { { Face.blank, 1 } }));
 
-			faces.Add(new FaceMap(new Dictionary<Face, int>() { { Face.failure, 1 } }));
+			faceMaps.Add(new FaceMap(new Dictionary<Face, int>() { { Face.failure, 1 } }));
 
-			faces.Add(new FaceMap(new Dictionary<Face, int>() { { Face.failure, 1 } }));
+			faceMaps.Add(new FaceMap(new Dictionary<Face, int>() { { Face.failure, 1 } }));
 
-			faces.Add(new FaceMap(new Dictionary<Face, int>() { { Face.threat, 1 } }));
+			faceMaps.Add(new FaceMap(new Dictionary<Face, int>() { { Face.threat, 1 } }));
 
-			faces.Add(new FaceMap(new Dictionary<Face, int>() { { Face.threat, 1 } }));
+			faceMaps.Add(new FaceMap(new Dictionary<Face, int>() { { Face.threat, 1 } }));
 		}
 	}
 }

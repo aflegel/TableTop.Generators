@@ -24,7 +24,7 @@ namespace DiceCalculator.Dice
 
 	public struct FaceMap
 	{
-		Dictionary<Face, int> faces;
+		public Dictionary<Face, int> faces;
 		public FaceMap(Dictionary<Face, int> keys)
 		{
 			faces = keys;
@@ -33,7 +33,7 @@ namespace DiceCalculator.Dice
 		public override int GetHashCode()
 		{
 			//gets a unique has by summing the hash of the string and a hash of the value
-			return faces.Sum(x => x.Key.ToString().GetHashCode() + x.Value.GetHashCode());
+			return faces.Sum(x => x.Key.GetHashCode() + x.Value.GetHashCode());
 		}
 
 		public override bool Equals(object obj)
@@ -90,7 +90,7 @@ namespace DiceCalculator.Dice
 		{
 			var ordered = faces.OrderBy(x => x.Key.ToString());
 
-			return string.Join(", ", ordered.Select(x => string.Format("{0} ({1})", x.Key.ToString(), x.Value)));
+			return string.Join(", ", ordered.Select(x => string.Format("{0,9} ({1})", x.Key.ToString(), x.Value)));
 		}
 	}
 }

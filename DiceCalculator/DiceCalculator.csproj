@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BreakdownCalculator.cs" />
     <Compile Include="Dice\Ability.cs" />
     <Compile Include="Dice\Boost.cs" />
     <Compile Include="Dice\Challenge.cs" />

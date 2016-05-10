@@ -11,31 +11,31 @@ namespace DiceCalculator.Dice
 
 		public Proficiency()
 		{
-			faces = new List<FaceMap>();
+			faceMaps = new List<FaceMap>();
 
-			faces.Add(new FaceMap(new Dictionary<Face, int>() { { Face.blank, 1 } }));
+			faceMaps.Add(new FaceMap(new Dictionary<Face, int>() { { Face.blank, 1 } }));
 
-			faces.Add(new FaceMap(new Dictionary<Face, int>() { { Face.success, 1 } }));
+			faceMaps.Add(new FaceMap(new Dictionary<Face, int>() { { Face.success, 1 } }));
 
-			faces.Add(new FaceMap(new Dictionary<Face, int>() { { Face.success, 1 } }));
+			faceMaps.Add(new FaceMap(new Dictionary<Face, int>() { { Face.success, 1 } }));
 
-			faces.Add(new FaceMap(new Dictionary<Face, int>() { { Face.success, 2 } }));
+			faceMaps.Add(new FaceMap(new Dictionary<Face, int>() { { Face.success, 2 } }));
 
-			faces.Add(new FaceMap(new Dictionary<Face, int>() { { Face.success, 2 } }));
+			faceMaps.Add(new FaceMap(new Dictionary<Face, int>() { { Face.success, 2 } }));
 
-			faces.Add(new FaceMap(new Dictionary<Face, int>() { { Face.advantage, 1 } }));
+			faceMaps.Add(new FaceMap(new Dictionary<Face, int>() { { Face.advantage, 1 } }));
 
-			faces.Add(new FaceMap(new Dictionary<Face, int>() { { Face.advantage, 1 }, { Face.success, 1 } }));
+			faceMaps.Add(new FaceMap(new Dictionary<Face, int>() { { Face.advantage, 1 }, { Face.success, 1 } }));
 
-			faces.Add(new FaceMap(new Dictionary<Face, int>() { { Face.advantage, 1 }, { Face.success, 1 } }));
+			faceMaps.Add(new FaceMap(new Dictionary<Face, int>() { { Face.advantage, 1 }, { Face.success, 1 } }));
 
-			faces.Add(new FaceMap(new Dictionary<Face, int>() { { Face.advantage, 1 }, { Face.success, 1 } }));
+			faceMaps.Add(new FaceMap(new Dictionary<Face, int>() { { Face.advantage, 1 }, { Face.success, 1 } }));
 
-			faces.Add(new FaceMap(new Dictionary<Face, int>() { { Face.advantage, 2 } }));
+			faceMaps.Add(new FaceMap(new Dictionary<Face, int>() { { Face.advantage, 2 } }));
 
-			faces.Add(new FaceMap(new Dictionary<Face, int>() { { Face.advantage, 2 } }));
+			faceMaps.Add(new FaceMap(new Dictionary<Face, int>() { { Face.advantage, 2 } }));
 
-			faces.Add(new FaceMap(new Dictionary<Face, int>() { { Face.triumph, 1 } }));
+			faceMaps.Add(new FaceMap(new Dictionary<Face, int>() { { Face.triumph, 1 } }));
 		}
 
 	}
