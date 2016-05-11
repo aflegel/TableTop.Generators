@@ -11,15 +11,15 @@ namespace DiceCalculator.Dice
 	/// </summary>
 	public enum Face
 	{
-		blank = (byte)0,
-		success = (byte)1,
-		failure = (byte)2,
-		advantage = (byte)3,
-		threat = (byte)4,
-		triumph = (byte)5,
-		dispair = (byte)6,
-		light = (byte)7,
-		dark = (byte)8
+		blank = 0,
+		success = 1,
+		failure = 2,
+		advantage = 3,
+		threat = 4,
+		triumph = 5,
+		dispair = 6,
+		light = 7,
+		dark = 8
 	}
 
 	public struct FaceMap

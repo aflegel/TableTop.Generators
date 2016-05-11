@@ -19,7 +19,7 @@ namespace DiceCalculator
 
 			ProcessPreOutput(dicePool);
 
-			List<FaceMap> bulkPool = ProcessBulkPool(dicePool);
+			/*List<FaceMap> bulkPool = ProcessBulkPool(dicePool);
 			totalCount = bulkPool.Count;
 
 			Dictionary<FaceMap, int> simplifiedPool = ProcessSimplifiedPool(bulkPool);
@@ -29,6 +29,12 @@ namespace DiceCalculator
 			ProcessAnalysisOutput(simplifiedPool, dicePool);
 
 			ProcessSuccessPool(simplifiedPool);
+			*/
+
+
+			Dictionary<FaceMap, int> simplifiedPool = TestProcessPoo(dicePool);
+
+
 
 			FaceMap test = Die.CountPool(dicePool);
 
@@ -57,6 +63,55 @@ namespace DiceCalculator
 				bulkPool = Die.ProcessPool(bulkPool, die);
 
 			return bulkPool;
+		}
+
+
+		protected Dictionary<FaceMap, int> TestProcessPoo(List<Die> dicePool)
+		{
+			Dictionary<FaceMap, int> bulkPool = new Dictionary<FaceMap, int>();
+			for (int i = 0; i < dicePool.Count; i++)
+			{
+				FaceMap node = new FaceMap(new Dictionary<Face, byte>());
+
+
+				for (int j = 0; j < dicePool[i].faceMaps.Count; j++)
+				{
+
+					for (int k = 0; k < dicePool.Count; k++)
+					{
+						int index;
+						if (k == i)
+							index = k;
+						else
+							index = i;
+
+						Console.WriteLine(string.Format("Die: {0} Face: {1}", index, j));
+
+						if (node.faces.Count == 0)
+							node = dicePool[i].faceMaps[index];
+						else
+							node = node.Merge(dicePool[i].faceMaps[index]);
+					}
+				}
+
+				if (node.faces.Count > 0)
+				{
+					if (bulkPool.ContainsKey(node))
+						bulkPool[node] = bulkPool[node] + 1;
+					else
+						bulkPool.Add(node, 1);
+				}
+
+			}
+
+			return bulkPool;
+		}
+
+		protected FaceMap TestRecursion()
+		{
+			FaceMap test = new FaceMap(new Dictionary<Face, byte>());
+
+			return test;
 		}
 
 		/// <summary>

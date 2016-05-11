@@ -16,11 +16,6 @@ namespace DiceCalculator
 			{
 				new Ability(),
 				new Ability(),
-				new Ability(),
-				new Ability(),
-				new Difficulty(),
-				new Difficulty(),
-				new Difficulty(),
 				new Difficulty()
 			});
 		}
