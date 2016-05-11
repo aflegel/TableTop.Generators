@@ -49,9 +49,9 @@ namespace DiceCalculator.Dice
 		{
 			//escape for new lists
 			if (pool.Count == 0)
-				return new FaceMap(new Dictionary<Face, int>());
+				return new FaceMap(new Dictionary<Face, byte>());
 
-			FaceMap nextPool = new FaceMap(new Dictionary<Face, int>());
+			FaceMap nextPool = new FaceMap(new Dictionary<Face, byte>());
 
 			foreach (Die dieFaces in pool)
 			{

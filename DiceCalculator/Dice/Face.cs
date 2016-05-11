@@ -11,21 +11,21 @@ namespace DiceCalculator.Dice
 	/// </summary>
 	public enum Face
 	{
-		blank = 0,
-		success = 1,
-		failure = 2,
-		advantage = 3,
-		threat = 4,
-		triumph = 5,
-		dispair = 6,
-		light = 7,
-		dark = 8
+		blank = (byte)0,
+		success = (byte)1,
+		failure = (byte)2,
+		advantage = (byte)3,
+		threat = (byte)4,
+		triumph = (byte)5,
+		dispair = (byte)6,
+		light = (byte)7,
+		dark = (byte)8
 	}
 
 	public struct FaceMap
 	{
-		public Dictionary<Face, int> faces;
-		public FaceMap(Dictionary<Face, int> keys)
+		public Dictionary<Face, byte> faces;
+		public FaceMap(Dictionary<Face, byte> keys)
 		{
 			faces = keys;
 		}
@@ -64,7 +64,7 @@ namespace DiceCalculator.Dice
 		/// <returns></returns>
 		public FaceMap Merge(FaceMap firstSet)
 		{
-			Dictionary<Face, int> merged = new Dictionary<Face, int>();
+			Dictionary<Face, byte> merged = new Dictionary<Face, byte>();
 
 			var keys = firstSet.faces.Keys.Union(faces.Keys);
 
@@ -73,7 +73,7 @@ namespace DiceCalculator.Dice
 				if (firstSet.faces.ContainsKey(key))
 				{
 					if (faces.ContainsKey(key))
-						merged.Add(key, firstSet.faces[key] + faces[key]);
+						merged.Add(key, (byte)(firstSet.faces[key] + faces[key]));
 					else
 						merged.Add(key, firstSet.faces[key]);
 				}

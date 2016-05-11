@@ -12,17 +12,17 @@ namespace DiceCalculator.Dice
 		{
 			faceMaps = new List<FaceMap>();
 
-			faceMaps.Add(new FaceMap(new Dictionary<Face, int>() { { Face.blank, 1 } }));
+			faceMaps.Add(new FaceMap(new Dictionary<Face, byte>() { { Face.blank, 1 } }));
 
-			faceMaps.Add(new FaceMap(new Dictionary<Face, int>() { { Face.blank, 1 } }));
+			faceMaps.Add(new FaceMap(new Dictionary<Face, byte>() { { Face.blank, 1 } }));
 
-			faceMaps.Add(new FaceMap(new Dictionary<Face, int>() { { Face.success, 1 } }));
+			faceMaps.Add(new FaceMap(new Dictionary<Face, byte>() { { Face.success, 1 } }));
 
-			faceMaps.Add(new FaceMap(new Dictionary<Face, int>() { { Face.success, 1 }, { Face.advantage, 1 } }));
+			faceMaps.Add(new FaceMap(new Dictionary<Face, byte>() { { Face.success, 1 }, { Face.advantage, 1 } }));
 
-			faceMaps.Add(new FaceMap(new Dictionary<Face, int>() { { Face.advantage, 2 } }));
+			faceMaps.Add(new FaceMap(new Dictionary<Face, byte>() { { Face.advantage, 2 } }));
 
-			faceMaps.Add(new FaceMap(new Dictionary<Face, int>() { { Face.advantage, 1 } }));
+			faceMaps.Add(new FaceMap(new Dictionary<Face, byte>() { { Face.advantage, 1 } }));
 
 		}
 	}

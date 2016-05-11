@@ -12,29 +12,29 @@ namespace DiceCalculator.Dice
 		{
 			faceMaps = new List<FaceMap>();
 
-			faceMaps.Add(new FaceMap(new Dictionary<Face, int>() { { Face.dark, 1 } }));
+			faceMaps.Add(new FaceMap(new Dictionary<Face, byte>() { { Face.dark, 1 } }));
 
-			faceMaps.Add(new FaceMap(new Dictionary<Face, int>() { { Face.dark, 1 } }));
+			faceMaps.Add(new FaceMap(new Dictionary<Face, byte>() { { Face.dark, 1 } }));
 
-			faceMaps.Add(new FaceMap(new Dictionary<Face, int>() { { Face.dark, 1 } }));
+			faceMaps.Add(new FaceMap(new Dictionary<Face, byte>() { { Face.dark, 1 } }));
 
-			faceMaps.Add(new FaceMap(new Dictionary<Face, int>() { { Face.dark, 1 } }));
+			faceMaps.Add(new FaceMap(new Dictionary<Face, byte>() { { Face.dark, 1 } }));
 
-			faceMaps.Add(new FaceMap(new Dictionary<Face, int>() { { Face.dark, 1 } }));
+			faceMaps.Add(new FaceMap(new Dictionary<Face, byte>() { { Face.dark, 1 } }));
 
-			faceMaps.Add(new FaceMap(new Dictionary<Face, int>() { { Face.dark, 1 } }));
+			faceMaps.Add(new FaceMap(new Dictionary<Face, byte>() { { Face.dark, 1 } }));
 
-			faceMaps.Add(new FaceMap(new Dictionary<Face, int>() { { Face.dark, 2 } }));
+			faceMaps.Add(new FaceMap(new Dictionary<Face, byte>() { { Face.dark, 2 } }));
 
-			faceMaps.Add(new FaceMap(new Dictionary<Face, int>() { { Face.light, 1 } }));
+			faceMaps.Add(new FaceMap(new Dictionary<Face, byte>() { { Face.light, 1 } }));
 
-			faceMaps.Add(new FaceMap(new Dictionary<Face, int>() { { Face.light, 1 } }));
+			faceMaps.Add(new FaceMap(new Dictionary<Face, byte>() { { Face.light, 1 } }));
 
-			faceMaps.Add(new FaceMap(new Dictionary<Face, int>() { { Face.light, 2 } }));
+			faceMaps.Add(new FaceMap(new Dictionary<Face, byte>() { { Face.light, 2 } }));
 
-			faceMaps.Add(new FaceMap(new Dictionary<Face, int>() { { Face.light, 2 } }));
+			faceMaps.Add(new FaceMap(new Dictionary<Face, byte>() { { Face.light, 2 } }));
 
-			faceMaps.Add(new FaceMap(new Dictionary<Face, int>() { { Face.light, 2 } }));
+			faceMaps.Add(new FaceMap(new Dictionary<Face, byte>() { { Face.light, 2 } }));
 		}
 	}
 }

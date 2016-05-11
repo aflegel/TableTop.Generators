@@ -13,21 +13,21 @@ namespace DiceCalculator.Dice
 		{
 			faceMaps = new List<FaceMap>();
 
-			faceMaps.Add(new FaceMap(new Dictionary<Face, int>() { { Face.blank, 1 } }));
+			faceMaps.Add(new FaceMap(new Dictionary<Face, byte>() { { Face.blank, 1 } }));
 
-			faceMaps.Add(new FaceMap(new Dictionary<Face, int>() { { Face.failure, 1 } }));
+			faceMaps.Add(new FaceMap(new Dictionary<Face, byte>() { { Face.failure, 1 } }));
 
-			faceMaps.Add(new FaceMap(new Dictionary<Face, int>() { { Face.failure, 2 } }));
+			faceMaps.Add(new FaceMap(new Dictionary<Face, byte>() { { Face.failure, 2 } }));
 
-			faceMaps.Add(new FaceMap(new Dictionary<Face, int>() { { Face.threat, 1 } }));
+			faceMaps.Add(new FaceMap(new Dictionary<Face, byte>() { { Face.threat, 1 } }));
 
-			faceMaps.Add(new FaceMap(new Dictionary<Face, int>() { { Face.threat, 1 } }));
+			faceMaps.Add(new FaceMap(new Dictionary<Face, byte>() { { Face.threat, 1 } }));
 
-			faceMaps.Add(new FaceMap(new Dictionary<Face, int>() { { Face.threat, 1 } }));
+			faceMaps.Add(new FaceMap(new Dictionary<Face, byte>() { { Face.threat, 1 } }));
 
-			faceMaps.Add(new FaceMap(new Dictionary<Face, int>() { { Face.threat, 1 } }));
+			faceMaps.Add(new FaceMap(new Dictionary<Face, byte>() { { Face.threat, 1 } }));
 
-			faceMaps.Add(new FaceMap(new Dictionary<Face, int>() { { Face.failure, 1 }, { Face.threat, 1 } }));
+			faceMaps.Add(new FaceMap(new Dictionary<Face, byte>() { { Face.failure, 1 }, { Face.threat, 1 } }));
 		}
 	}
 }

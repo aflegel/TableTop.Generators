@@ -12,13 +12,13 @@ namespace DiceCalculator.Dice
 		{
 			faceMaps = new List<FaceMap>();
 
-			faceMaps.Add(new FaceMap(new Dictionary<Face, int>() { { Face.blank, 1 } }));
+			faceMaps.Add(new FaceMap(new Dictionary<Face, byte>() { { Face.blank, 1 } }));
 
-			faceMaps.Add(new FaceMap(new Dictionary<Face, int>() { { Face.success, 1 } }));
+			faceMaps.Add(new FaceMap(new Dictionary<Face, byte>() { { Face.success, 1 } }));
 
-			faceMaps.Add(new FaceMap(new Dictionary<Face, int>() { { Face.success, 2 } }));
+			faceMaps.Add(new FaceMap(new Dictionary<Face, byte>() { { Face.success, 2 } }));
 
-			faceMaps.Add(new FaceMap(new Dictionary<Face, int>() { { Face.blank, 2 } }));
+			faceMaps.Add(new FaceMap(new Dictionary<Face, byte>() { { Face.blank, 2 } }));
 
 		}
 	}
