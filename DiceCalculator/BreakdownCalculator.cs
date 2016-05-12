@@ -19,29 +19,15 @@ namespace DiceCalculator
 
 			ProcessPreOutput(dicePool);
 
-			/*List<FaceMap> bulkPool = ProcessBulkPool(dicePool);
-			totalCount = bulkPool.Count;
+			Dictionary<FaceMap, long> outcomePool = TestDicePool(dicePool);
 
-			Dictionary<FaceMap, int> simplifiedPool = ProcessSimplifiedPool(bulkPool);
+			totalCount = outcomePool.Sum(s => s.Value);
 
-			ProcessMainOutput(simplifiedPool);
+			ProcessMainOutput(outcomePool);
 
-			ProcessAnalysisOutput(simplifiedPool, dicePool);
+			ProcessAnalysisOutput(outcomePool, dicePool);
 
-			ProcessSuccessPool(simplifiedPool);
-			*/
-
-
-			Dictionary<FaceMap, int> simplifiedPool = TestProcessPoo(dicePool);
-
-			totalCount = simplifiedPool.Sum(s => s.Value);
-
-
-			ProcessMainOutput(simplifiedPool);
-
-			ProcessAnalysisOutput(simplifiedPool, dicePool);
-
-			ProcessSuccessPool(simplifiedPool);
+			ProcessSuccessPool(outcomePool);
 
 			FaceMap test = Die.CountPool(dicePool);
 		}
@@ -52,35 +38,52 @@ namespace DiceCalculator
 		/// <param name="dicePool"></param>
 		protected void ProcessPreOutput(List<Die> dicePool)
 		{
-			var rollEstimation = dicePool.Aggregate(1, (x, y) => x * y.faceMaps.Count);
+			var rollEstimation = dicePool.Aggregate((long)1, (x, y) => x * y.faceMaps.Count);
 
 			Console.WriteLine(string.Format("Estimated number of outcomes: {0:n0}", rollEstimation));
 		}
 
-		/// <summary>
-		/// Calculate all possible outcomes in a large dataset
-		/// </summary>
-		/// <returns></returns>
-		protected List<FaceMap> ProcessBulkPool(List<Die> dicePool)
+		protected Dictionary<FaceMap, long> TestDicePool(List<Die> dicePool)
 		{
-			List<FaceMap> bulkPool = new List<FaceMap>();
 
-			foreach (Die die in dicePool)
-				bulkPool = Die.ProcessPool(bulkPool, die);
+			Dictionary<FaceMap, long> bulkPool = new Dictionary<FaceMap, long>();
 
+			List<Dictionary<FaceMap, long>> partialPools = new List<Dictionary<FaceMap, long>>();
+
+			var groups = dicePool.Select((p, index) => new { p, index }).GroupBy(a => a.index / 6).Select((grp => grp.Select(g => g.p).ToList())).ToList();
+
+			foreach (var group in groups)
+			{
+				partialPools.Add(ProcessDicePool(group));
+			}
+
+			foreach (var partial in partialPools)
+			{
+				Console.WriteLine(string.Format("Partial Rolls: {0,10:n0} Unique: {1,10:n0}", partial.Sum(s => s.Value), partial.Count));
+				//gather cross product
+				bulkPool = ProcessCrossProduct(bulkPool, partial);
+
+				Console.WriteLine(string.Format("Progress Rolls: {0,10:n0} Unique: {1,10:n0}", bulkPool.Sum(s => s.Value), bulkPool.Count));
+				Console.WriteLine("--");
+			}
+
+			Console.WriteLine(string.Format("Processed Rolls: {0,10:n0} Unique: {1,10:n0}", bulkPool.Sum(s => s.Value), bulkPool.Count));
+			/*
+			var test = ProcessDicePool(dicePool);
+
+			Console.WriteLine(string.Format("Confirming Rolls: {0,10:n0} Unique: {1,10:n0}", test.Sum(s => (long)s.Value), test.Count));
+			*/
 			return bulkPool;
 		}
 
 
-		protected Dictionary<FaceMap, int> TestProcessPoo(List<Die> dicePool)
+		protected Dictionary<FaceMap, long> ProcessDicePool(List<Die> dicePool)
 		{
 			int[] indexTracker = new int[dicePool.Count];
 			for (int i = 0; i < dicePool.Count; i++)
 				indexTracker[i] = 0;
 
-			Dictionary<FaceMap, int> bulkPool = new Dictionary<FaceMap, int>();
-
-
+			Dictionary<FaceMap, long> bulkPool = new Dictionary<FaceMap, long>();
 
 			while (indexTracker[dicePool.Count - 1] < dicePool[dicePool.Count - 1].faceMaps.Count)
 			{
@@ -102,28 +105,45 @@ namespace DiceCalculator
 					//add the node to the mix
 					if (node.faces.Count > 0)
 					{
-						if (bulkPool.ContainsKey(node))
+
+						try
+						{
 							bulkPool[node] = bulkPool[node] + 1;
-						else
+						}
+						catch
+						{
 							bulkPool.Add(node, 1);
+						}
 					}
 				}
 
 				//manually update the next index
-				indexTracker[1]++;
-				
+				if (dicePool.Count > 1)
+					indexTracker[1]++;
+				else
+					indexTracker[0] = dicePool[0].faceMaps.Count;
+
 				//update the indexes
 				for (int i = 1; i < dicePool.Count; i++)
 				{
 					if (indexTracker[i] >= dicePool[i].faceMaps.Count)
 					{
-						if (i > 3)
-							Console.Write(i);
+						if (i > 6)
+						{
+							Console.WriteLine();
+							Console.WriteLine(string.Format("Processing: {0:n0}", bulkPool.Sum(s => s.Value)));
+						}
+						else if (i > 4)
+							Console.Write(".");
 
 						if (i < dicePool.Count - 1)
 						{
 							indexTracker[i] = 0;
 							indexTracker[i + 1]++;
+						}
+						else
+						{
+							Console.WriteLine();
 						}
 					}
 				}
@@ -136,56 +156,67 @@ namespace DiceCalculator
 			return bulkPool;
 		}
 
-		/// <summary>
-		/// Take a large dataset and refine into a unique list with frequency
-		/// </summary>
-		/// <param name="bulkPool"></param>
-		/// <returns></returns>
-		protected Dictionary<FaceMap, int> ProcessSimplifiedPool(List<FaceMap> bulkPool)
+		protected Dictionary<FaceMap, long> ProcessCrossProduct(Dictionary<FaceMap, long> startingPool, Dictionary<FaceMap, long> additionalPool)
 		{
-			Dictionary<FaceMap, int> simplifiedPool = new Dictionary<FaceMap, int>();
 
-			//go through the large pool and summarize into unique rolls
-			foreach (FaceMap rolls in bulkPool)
+			if (startingPool.Count == 0)
+				return additionalPool;
+
+			Dictionary<FaceMap, long> bulkPool = new Dictionary<FaceMap, long>();
+
+			foreach (FaceMap startingMap in startingPool.Keys)
 			{
-				if (simplifiedPool.ContainsKey(rolls))
-					simplifiedPool[rolls] = simplifiedPool[rolls] + 1;
-				else
-					simplifiedPool.Add(rolls, 1);
+				foreach (FaceMap addingMap in additionalPool.Keys)
+				{
+					FaceMap node = startingMap.Merge(addingMap);
+					long combinedFrequency = startingPool[startingMap] * additionalPool[addingMap];
+
+					try
+					{
+						bulkPool[node] = bulkPool[node] + combinedFrequency;
+					}
+					catch
+					{
+						bulkPool.Add(node, combinedFrequency);
+					}
+				}
 			}
 
-			return simplifiedPool;
+			return bulkPool;
 		}
+
 
 		/// <summary>
 		/// Displays the Unique List of rolls
 		/// </summary>
-		/// <param name="simplifiedPool"></param>
-		protected void ProcessMainOutput(Dictionary<FaceMap, int> simplifiedPool)
+		/// <param name="outcomePool"></param>
+		protected void ProcessMainOutput(Dictionary<FaceMap, long> outcomePool)
 		{
 			string format = "| {0,9:#0} | {1,11} | {2}";
 			Console.WriteLine("Possible Roll Breakdown");
 			Console.WriteLine("-----------------------");
 
-			Console.WriteLine(string.Format(format, "Frequency", "Probability", "Definition"));
+			/*
+			 *
+			 * Console.WriteLine(string.Format(format, "Frequency", "Probability", "Definition"));
 
-			/*foreach (KeyValuePair<FaceMap, int> map in simplifiedPool.OrderBy(x => x.Value))
+			foreach (KeyValuePair<FaceMap, int> map in outcomePool.OrderBy(x => x.Value))
 			{
 				//print roll count, probability, and the faces
 				Console.WriteLine(string.Format(format, map.Value, (map.Value / totalCount).ToString("#0.0%"), map.Key.ToString()));
 			}*/
 
-			Console.WriteLine(string.Format("Total Possibilities: {0}", totalCount));
-			Console.WriteLine(string.Format("Total Unique: {0}", simplifiedPool.Count));
+			Console.WriteLine(string.Format("Total Possibilities: {0:n0}", totalCount));
+			Console.WriteLine(string.Format("Total Unique: {0:n0}", outcomePool.Count));
 		}
 
 
 		/// <summary>
 		/// Displays the breakdown of rolls and the probability of success
 		/// </summary>
-		/// <param name="simplifiedPool"></param>
+		/// <param name="outcomePool"></param>
 		/// <param name="dicePool"></param>
-		protected void ProcessAnalysisOutput(Dictionary<FaceMap, int> simplifiedPool, List<Die> dicePool)
+		protected void ProcessAnalysisOutput(Dictionary<FaceMap, long> outcomePool, List<Die> dicePool)
 		{
 			//string format = "| {0,9} | {1,5:#0} | {2,9:#0} | {3,11:#0.0} |";
 			Console.WriteLine();
@@ -200,7 +231,7 @@ namespace DiceCalculator
 			{
 				for (byte i = 1; i <= dicePool.Count * 2; i++)
 				{
-					int found = ProcessBreakdownPool(simplifiedPool, new FaceMap(new Dictionary<Face, byte>() { { face, i } }));
+					long found = ProcessBreakdownPool(outcomePool, new FaceMap(new Dictionary<Face, byte>() { { face, i } }));
 
 					//Console.WriteLine(string.Format(format, face.ToString(), i, found, (found / totalCount).ToString("#0.0%")));
 
@@ -214,10 +245,10 @@ namespace DiceCalculator
 		/// <summary>
 		/// Searches a pool of dice for a specific outcome and returns the number of rolls of that outcome
 		/// </summary>
-		/// <param name="simplifiedPool"></param>
+		/// <param name="outcomePool"></param>
 		/// <param name="requiredQuery"></param>
 		/// <returns></returns>
-		protected int ProcessBreakdownPool(Dictionary<FaceMap, int> simplifiedPool, FaceMap requiredQuery)
+		protected long ProcessBreakdownPool(Dictionary<FaceMap, long> outcomePool, FaceMap requiredQuery)
 		{
 			//todo: This needs to be reconfigured to have a the ability to search for more than one field at a time
 			string format = "| {0,9:#0} | {1,11} | {2}";
@@ -225,7 +256,7 @@ namespace DiceCalculator
 			Console.WriteLine(string.Format("{0}", requiredQuery.ToString()));
 
 			//initialize the frequency for this requirement and the threshold for match
-			int frequency = 0;
+			long frequency = 0;
 			int searchThreshold = requiredQuery.faces.Sum(x => x.Value);
 
 			//expand the search to include the superior versions of the requirement
@@ -250,7 +281,7 @@ namespace DiceCalculator
 			}
 
 			//loop through the simple pool to find matches
-			foreach (FaceMap map in simplifiedPool.Keys)
+			foreach (FaceMap map in outcomePool.Keys)
 			{
 				int threshold = 0;
 
@@ -264,18 +295,18 @@ namespace DiceCalculator
 				//if the found threshold is the same as the required threshold add the frequency and display the roll result
 				if (threshold == searchThreshold)
 				{
-					frequency += simplifiedPool[map];
-					//Console.WriteLine(string.Format(format, simplifiedPool[map], (simplifiedPool[map] / totalCount).ToString("#0.0%"), map.ToString()));
+					frequency += outcomePool[map];
+					//Console.WriteLine(string.Format(format, outcomePool[map], (outcomePool[map] / totalCount).ToString("#0.0%"), map.ToString()));
 				}
 			}
 
-			Console.WriteLine(string.Format("Total {0} ({1}) ", frequency, (frequency / totalCount).ToString("#0.0%")));
+			Console.WriteLine(string.Format("Total {0:n0} ({1}) ", frequency, (frequency / totalCount).ToString("#0.000%")));
 			Console.WriteLine("---");
 
 			return frequency;
 		}
 
-		protected void ProcessSuccessPool(Dictionary<FaceMap, int> simplifiedPool)
+		protected void ProcessSuccessPool(Dictionary<FaceMap, long> outcomePool)
 		{
 			string format = "| {0,9:#0} | {1,11} | {2}";
 
@@ -284,10 +315,10 @@ namespace DiceCalculator
 
 			List<Face> successKeys = new List<Face>() { Face.success, Face.advantage, Face.triumph };
 			List<Face> failureKeys = new List<Face>() { Face.failure, Face.threat, Face.dispair };
-			int successFrequency = 0;
+			long successFrequency = 0;
 
 			//loop through the simple pool to find matches
-			foreach (FaceMap map in simplifiedPool.Keys)
+			foreach (FaceMap map in outcomePool.Keys)
 			{
 				int successThreshold = 0;
 				int failureThreshold = 0;
@@ -309,13 +340,13 @@ namespace DiceCalculator
 				//if the found threshold is the same as the required threshold add the frequency and display the roll result
 				if (successThreshold > 0 && successThreshold > failureThreshold)
 				{
-					successFrequency += simplifiedPool[map];
-					//Console.WriteLine(string.Format(format, simplifiedPool[map], (simplifiedPool[map] / totalCount).ToString("#0.0%"), map.ToString()));
+					successFrequency += outcomePool[map];
+					//Console.WriteLine(string.Format(format, outcomePool[map], (outcomePool[map] / totalCount).ToString("#0.0%"), map.ToString()));
 				}
 			}
 
-			Console.WriteLine(string.Format("Successes: {0} ({1}) ", successFrequency, (successFrequency / totalCount).ToString("#0.0%")));
-			Console.WriteLine(string.Format("Failures:  {0} ({1}) ", totalCount - successFrequency, ((totalCount - successFrequency) / totalCount).ToString("#0.0%")));
+			Console.WriteLine(string.Format("Successes: {0:n0} ({1}) ", successFrequency, (successFrequency / totalCount).ToString("#0.0000%")));
+			Console.WriteLine(string.Format("Failures:  {0:n0} ({1}) ", totalCount - successFrequency, ((totalCount - successFrequency) / totalCount).ToString("#0.0000%")));
 			Console.WriteLine("---");
 		}
 	}
