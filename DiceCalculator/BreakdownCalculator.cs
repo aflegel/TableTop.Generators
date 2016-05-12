@@ -34,10 +34,16 @@ namespace DiceCalculator
 
 			Dictionary<FaceMap, int> simplifiedPool = TestProcessPoo(dicePool);
 
+			totalCount = simplifiedPool.Sum(s => s.Value);
 
+
+			ProcessMainOutput(simplifiedPool);
+
+			ProcessAnalysisOutput(simplifiedPool, dicePool);
+
+			ProcessSuccessPool(simplifiedPool);
 
 			FaceMap test = Die.CountPool(dicePool);
-
 		}
 
 		/// <summary>
@@ -68,50 +74,66 @@ namespace DiceCalculator
 
 		protected Dictionary<FaceMap, int> TestProcessPoo(List<Die> dicePool)
 		{
-			Dictionary<FaceMap, int> bulkPool = new Dictionary<FaceMap, int>();
+			int[] indexTracker = new int[dicePool.Count];
 			for (int i = 0; i < dicePool.Count; i++)
+				indexTracker[i] = 0;
+
+			Dictionary<FaceMap, int> bulkPool = new Dictionary<FaceMap, int>();
+
+
+
+			while (indexTracker[dicePool.Count - 1] < dicePool[dicePool.Count - 1].faceMaps.Count)
 			{
-				FaceMap node = new FaceMap(new Dictionary<Face, byte>());
-
-
-				for (int j = 0; j < dicePool[i].faceMaps.Count; j++)
+				for (int i = 0; i < dicePool[0].faceMaps.Count; i++)
 				{
+					//add the zero index to the mix
+					FaceMap node = dicePool[0].faceMaps[i];
+					//Console.WriteLine(string.Format("Die: {0} Face: {1}", 0, i));
 
-					for (int k = 0; k < dicePool.Count; k++)
+					for (int j = 1; j < dicePool.Count; j++)
 					{
-						int index;
-						if (k == i)
-							index = k;
-						else
-							index = i;
+						node = node.Merge(dicePool[j].faceMaps[indexTracker[j]]);
 
-						Console.WriteLine(string.Format("Die: {0} Face: {1}", index, j));
+						//Console.WriteLine(string.Format("Die: {0} Face: {1}", j, indexTracker[j]));
+					}
 
-						if (node.faces.Count == 0)
-							node = dicePool[i].faceMaps[index];
+					//Console.WriteLine("---");
+
+					//add the node to the mix
+					if (node.faces.Count > 0)
+					{
+						if (bulkPool.ContainsKey(node))
+							bulkPool[node] = bulkPool[node] + 1;
 						else
-							node = node.Merge(dicePool[i].faceMaps[index]);
+							bulkPool.Add(node, 1);
 					}
 				}
 
-				if (node.faces.Count > 0)
+				//manually update the next index
+				indexTracker[1]++;
+				
+				//update the indexes
+				for (int i = 1; i < dicePool.Count; i++)
 				{
-					if (bulkPool.ContainsKey(node))
-						bulkPool[node] = bulkPool[node] + 1;
-					else
-						bulkPool.Add(node, 1);
-				}
+					if (indexTracker[i] >= dicePool[i].faceMaps.Count)
+					{
+						if (i > 3)
+							Console.Write(i);
 
+						if (i < dicePool.Count - 1)
+						{
+							indexTracker[i] = 0;
+							indexTracker[i + 1]++;
+						}
+					}
+				}
 			}
 
+
+
+
+
 			return bulkPool;
-		}
-
-		protected FaceMap TestRecursion()
-		{
-			FaceMap test = new FaceMap(new Dictionary<Face, byte>());
-
-			return test;
 		}
 
 		/// <summary>
@@ -147,11 +169,11 @@ namespace DiceCalculator
 
 			Console.WriteLine(string.Format(format, "Frequency", "Probability", "Definition"));
 
-			foreach (KeyValuePair<FaceMap, int> map in simplifiedPool.OrderBy(x => x.Value))
+			/*foreach (KeyValuePair<FaceMap, int> map in simplifiedPool.OrderBy(x => x.Value))
 			{
 				//print roll count, probability, and the faces
 				Console.WriteLine(string.Format(format, map.Value, (map.Value / totalCount).ToString("#0.0%"), map.Key.ToString()));
-			}
+			}*/
 
 			Console.WriteLine(string.Format("Total Possibilities: {0}", totalCount));
 			Console.WriteLine(string.Format("Total Unique: {0}", simplifiedPool.Count));
@@ -243,7 +265,7 @@ namespace DiceCalculator
 				if (threshold == searchThreshold)
 				{
 					frequency += simplifiedPool[map];
-					Console.WriteLine(string.Format(format, simplifiedPool[map], (simplifiedPool[map] / totalCount).ToString("#0.0%"), map.ToString()));
+					//Console.WriteLine(string.Format(format, simplifiedPool[map], (simplifiedPool[map] / totalCount).ToString("#0.0%"), map.ToString()));
 				}
 			}
 
@@ -288,7 +310,7 @@ namespace DiceCalculator
 				if (successThreshold > 0 && successThreshold > failureThreshold)
 				{
 					successFrequency += simplifiedPool[map];
-					Console.WriteLine(string.Format(format, simplifiedPool[map], (simplifiedPool[map] / totalCount).ToString("#0.0%"), map.ToString()));
+					//Console.WriteLine(string.Format(format, simplifiedPool[map], (simplifiedPool[map] / totalCount).ToString("#0.0%"), map.ToString()));
 				}
 			}
 

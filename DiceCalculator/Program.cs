@@ -14,8 +14,16 @@ namespace DiceCalculator
 
 			BreakdownCalculator diceCalculator = new BreakdownCalculator(new List<Die>()
 			{
+				new Boost(),
 				new Ability(),
 				new Ability(),
+				new Proficiency(),
+				//new Ability(),
+				//new Ability(),
+				//new Difficulty(),
+				//new Difficulty(),
+				new Difficulty(),
+				new Difficulty(),
 				new Difficulty()
 			});
 		}
