@@ -11,10 +11,10 @@ namespace DiceCalculator
 {
 	class Program
 	{
-		const int ABILITY_LIMIT = 1;
-		const int UPGRADE_LIMIT = 1;
-		const int DIFFICULTY_LIMIT = 1;
-		const int CHALLENGE_LIMIT = 1;
+		const int ABILITY_LIMIT = 6;
+		const int UPGRADE_LIMIT = 4;
+		const int DIFFICULTY_LIMIT = 6;
+		const int CHALLENGE_LIMIT = 4;
 
 		static void Main(string[] args)
 		{
@@ -28,7 +28,7 @@ namespace DiceCalculator
 		/// </summary>
 		public static void SkillBreakdown()
 		{
-			StreamWriter writer = new StreamWriter("DiceResults.txt");
+			StreamWriter writer = new StreamWriter("DiceResults.csv");
 
 			List<DieResult> resultList = new List<DieResult>();
 
@@ -46,14 +46,15 @@ namespace DiceCalculator
 						for (int l = 0; (l <= CHALLENGE_LIMIT) && (l <= k); l++)
 						{
 							List<Die> pool = GetPool(i - j, j, k - l, l);
-							BreakdownCalculator calculator = new BreakdownCalculator(pool, writer);
+							BreakdownCalculator calculator = new BreakdownCalculator(pool);
 							resultList.Add(calculator.Run());
 						}
 					}
 				}
 			}
 
-			writer.Write(string.Format("{{ Rolls:[{0}]}}", string.Join("], [", resultList)));
+			writer.WriteLine("pool, total, successes, failures, advantages, threats, stalemate, triumphs, despairs");
+			writer.WriteLine(string.Format("{0}", string.Join("\n", resultList)));
 
 			writer.Close();
 		}
@@ -99,7 +100,7 @@ namespace DiceCalculator
 				new SetBack(),
 				new SetBack(),
 				new SetBack()
-				}, null);
+				});
 		}
 
 
@@ -121,7 +122,7 @@ namespace DiceCalculator
 				new Difficulty(),
 				new Difficulty(),
 				new Difficulty()
-			}, null);
+			});
 		}
 	}
 }

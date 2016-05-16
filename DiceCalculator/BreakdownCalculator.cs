@@ -12,14 +12,12 @@ namespace DiceCalculator
 	{
 		//this is a decimal to do math
 		decimal totalCount;
-		StreamWriter TextOutput;
 		List<Die> dicePool;
 		DieResult results;
 
-		public BreakdownCalculator(List<Die> testingDice, StreamWriter outputStream)
+		public BreakdownCalculator(List<Die> testingDice)
 		{
 			dicePool = testingDice;
-			TextOutput = outputStream;
 		}
 
 		public DieResult Run()

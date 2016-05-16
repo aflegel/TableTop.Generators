@@ -26,9 +26,7 @@ namespace DiceCalculator.Dice
 	{
 		public override string ToString()
 		{
-			var test = string.Format("{0}", count);
-
-			return string.Format("{{ pool:'{0}', total:{1}, successes:{2}, failures:{3}, advantages:{4}, threats:{5}, stalemate:{6}, triumphs:{7}, despairs:{8} }}", dice, count, success, failure, advantage, threat, stalemate, triumph, despair);
+			return string.Format("\"{0}\", {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}", dice, count, success, failure, advantage, threat, stalemate, triumph, despair);
 		}
 
 		public string dice;
