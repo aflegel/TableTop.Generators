@@ -17,9 +17,29 @@ namespace DiceCalculator.Dice
 		advantage = 3,
 		threat = 4,
 		triumph = 5,
-		dispair = 6,
+		despair = 6,
 		light = 7,
 		dark = 8
+	}
+
+	public struct DieResult
+	{
+		public override string ToString()
+		{
+			var test = string.Format("{0}", count);
+
+			return string.Format("{{ pool:'{0}', total:{1}, successes:{2}, failures:{3}, advantages:{4}, threats:{5}, stalemate:{6}, triumphs:{7}, despairs:{8} }}", dice, count, success, failure, advantage, threat, stalemate, triumph, despair);
+		}
+
+		public string dice;
+		public long count;
+		public long success;
+		public long failure;
+		public long advantage;
+		public long threat;
+		public long stalemate;
+		public long triumph;
+		public long despair;
 	}
 
 	public struct FaceMap

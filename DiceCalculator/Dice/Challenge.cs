@@ -34,7 +34,7 @@ namespace DiceCalculator.Dice
 
 			faceMaps.Add(new FaceMap(new Dictionary<Face, byte>() { { Face.threat, 1 } }));
 
-			faceMaps.Add(new FaceMap(new Dictionary<Face, byte>() { { Face.dispair, 1 } }));
+			faceMaps.Add(new FaceMap(new Dictionary<Face, byte>() { { Face.despair, 1 } }));
 		}
 	}
 }

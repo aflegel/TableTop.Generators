@@ -64,5 +64,11 @@ namespace DiceCalculator.Dice
 			return nextPool;
 		}
 
+
+		public override string ToString()
+		{
+
+			return this.GetType().Name;
+		}
 	}
 }
