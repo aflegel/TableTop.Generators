@@ -339,11 +339,11 @@ namespace DiceCalculator
 					threatThreshold += map.faces[Face.threat];
 
 				//if the found threshold is the same as the required threshold add the frequency and display the roll result
-				if (successThreshold > 0 && successThreshold > failureThreshold)
+				if (advantageThreshold > 0 && advantageThreshold > threatThreshold)
 				{
 					advantageFrequency += outcomePool[map];
 				}
-				else if (failureThreshold > successThreshold)
+				else if (threatThreshold > advantageThreshold)
 				{
 					threatFrequency += outcomePool[map];
 				}
