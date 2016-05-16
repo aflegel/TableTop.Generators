@@ -26,16 +26,15 @@ namespace DiceCalculator
 
 			ProcessPreOutput(dicePool);
 
-			Dictionary<FaceMap, long> outcomePool = TestDicePool(dicePool);
+			Dictionary<FaceMap, long> outcomePool = ProcessDicePool(dicePool);
 
 			ProcessMainOutput(outcomePool);
 
 			//ProcessAnalysisOutput(outcomePool, dicePool);
 
+			SummarizePool(outcomePool);
 			ProcessAdvantagePool(outcomePool);
-			ProcessSuccessPool(outcomePool);
-
-			FaceMap test = Die.CountPool(dicePool);
+			ProcessTriumphPool(outcomePool);
 
 			return results;
 		}
@@ -49,17 +48,11 @@ namespace DiceCalculator
 			var rollEstimation = dicePool.Aggregate((long)1, (x, y) => x * y.faceMaps.Count);
 			var poolText = dicePool.GroupBy(info => info.ToString()).Select(group => string.Format("{0} {1}", group.Key, group.Count()) ).ToList();
 
-			//TextOutput.WriteLine();
-			//TextOutput.WriteLine("~~~~~~~~~~~~");
-			//TextOutput.WriteLine();
-			//TextOutput.WriteLine(string.Format("Pool: {0}", string.Join(", ", poolText)));
-			Console.WriteLine(string.Format("Pool: {0}", string.Join(", ", poolText)));
-			Console.WriteLine(string.Format("Estimated number of outcomes: {0:n0}", rollEstimation));
-
-
+			//update the user
+			Console.WriteLine(string.Format("Pool: {0} | Outcomes: {1} ", string.Join(", ", poolText), rollEstimation));
 		}
 
-		protected Dictionary<FaceMap, long> TestDicePool(List<Die> dicePool)
+		protected Dictionary<FaceMap, long> ProcessDicePool(List<Die> dicePool)
 		{
 
 			Dictionary<FaceMap, long> bulkPool = new Dictionary<FaceMap, long>();
@@ -70,7 +63,7 @@ namespace DiceCalculator
 
 			foreach (var group in groups)
 			{
-				partialPools.Add(ProcessDicePool(group));
+				partialPools.Add(ProcessPartialDicePool(group));
 			}
 
 			foreach (var partial in partialPools)
@@ -93,7 +86,7 @@ namespace DiceCalculator
 		}
 
 
-		protected Dictionary<FaceMap, long> ProcessDicePool(List<Die> dicePool)
+		protected Dictionary<FaceMap, long> ProcessPartialDicePool(List<Die> dicePool)
 		{
 			int[] indexTracker = new int[dicePool.Count];
 			for (int i = 0; i < dicePool.Count; i++)
@@ -107,21 +100,15 @@ namespace DiceCalculator
 				{
 					//add the zero index to the mix
 					FaceMap node = dicePool[0].faceMaps[i];
-					//Console.WriteLine(string.Format("Die: {0} Face: {1}", 0, i));
 
 					for (int j = 1; j < dicePool.Count; j++)
 					{
 						node = node.Merge(dicePool[j].faceMaps[indexTracker[j]]);
-
-						//Console.WriteLine(string.Format("Die: {0} Face: {1}", j, indexTracker[j]));
 					}
-
-					//Console.WriteLine("---");
 
 					//add the node to the mix
 					if (node.faces.Count > 0)
 					{
-
 						try
 						{
 							bulkPool[node] = bulkPool[node] + 1;
@@ -144,30 +131,14 @@ namespace DiceCalculator
 				{
 					if (indexTracker[i] >= dicePool[i].faceMaps.Count)
 					{
-						if (i > 6)
-						{
-							//Console.WriteLine();
-							//Console.WriteLine(string.Format("Processing: {0:n0}", bulkPool.Sum(s => s.Value)));
-						}
-						//else if (i > 4)
-						//	Console.Write(".");
-
 						if (i < dicePool.Count - 1)
 						{
 							indexTracker[i] = 0;
 							indexTracker[i + 1]++;
 						}
-						else
-						{
-							//Console.WriteLine();
-						}
 					}
 				}
 			}
-
-
-
-
 
 			return bulkPool;
 		}
@@ -215,25 +186,6 @@ namespace DiceCalculator
 			results.dice = string.Join(", ", poolText);
 			results.count = outcomePool.Sum(s => s.Value);
 			totalCount = results.count;
-
-
-			//string format = "| {0,9:#0} | {1,11} | {2}";
-			//Console.WriteLine();
-			//Console.WriteLine("Possible Roll Breakdown");
-			//TextOutput.WriteLine("-----------------------");
-
-			/*
-			 *
-			 * Console.WriteLine(string.Format(format, "Frequency", "Probability", "Definition"));
-
-			foreach (KeyValuePair<FaceMap, int> map in outcomePool.OrderBy(x => x.Value))
-			{
-				//print roll count, probability, and the faces
-				Console.WriteLine(string.Format(format, map.Value, (map.Value / totalCount).ToString("#0.0%"), map.Key.ToString()));
-			}*/
-
-			//TextOutput.WriteLine(string.Format("Total Possibilities: {0:n0}", totalCount));
-			//TextOutput.WriteLine(string.Format("Total Unique: {0:n0}", outcomePool.Count));
 		}
 
 
@@ -332,23 +284,30 @@ namespace DiceCalculator
 			return frequency;
 		}
 
-		protected void ProcessSuccessPool(Dictionary<FaceMap, long> outcomePool)
+		/// <summary>
+		///
+		/// </summary>
+		/// <param name="outcomePool"></param>
+		protected void SummarizePool(Dictionary<FaceMap, long> outcomePool)
 		{
-			//string format = "| {0,9:#0} | {1,11} | {2}";
-
-			//TextOutput.WriteLine();
-			//Console.WriteLine("Breakdown of Successes");
-			//TextOutput.WriteLine("----------------------");
-
 			List<Face> successKeys = new List<Face>() { Face.success, Face.triumph };
 			List<Face> failureKeys = new List<Face>() { Face.failure, Face.despair };
+
 			long successFrequency = 0;
+
+			long advantageFrequency = 0;
+			long threatFrequency = 0;
+			long triumphFrequency = 0;
+			long despairFrequency = 0;
 
 			//loop through the simple pool to find matches
 			foreach (FaceMap map in outcomePool.Keys)
 			{
 				int successThreshold = 0;
 				int failureThreshold = 0;
+
+				int advantageThreshold = 0;
+				int threatThreshold = 0;
 
 				foreach (Face face in successKeys)
 				{
@@ -368,61 +327,46 @@ namespace DiceCalculator
 				if (successThreshold > 0 && successThreshold > failureThreshold)
 				{
 					successFrequency += outcomePool[map];
-					//Console.WriteLine(string.Format(format, outcomePool[map], (outcomePool[map] / totalCount).ToString("#0.0%"), map.ToString()));
 				}
+
+
+				//if it finds a matching key increase the threshold
+				if (map.faces.ContainsKey(Face.advantage))
+					advantageThreshold += map.faces[Face.advantage];
+
+				//if it finds a matching key increase the threshold
+				if (map.faces.ContainsKey(Face.threat))
+					threatThreshold += map.faces[Face.threat];
+
+				//if the found threshold is the same as the required threshold add the frequency and display the roll result
+				if (successThreshold > 0 && successThreshold > failureThreshold)
+				{
+					advantageFrequency += outcomePool[map];
+				}
+				else if (failureThreshold > successThreshold)
+				{
+					threatFrequency += outcomePool[map];
+				}
+
+				//if it finds a matching key increase the threshold
+				if (map.faces.ContainsKey(Face.triumph))
+					triumphFrequency += map.faces[Face.triumph];
+
+				//if it finds a matching key increase the threshold
+				if (map.faces.ContainsKey(Face.despair))
+					despairFrequency += map.faces[Face.despair];
 			}
 
 			results.success = successFrequency;
 			results.failure = results.count - successFrequency;
 
-			//TextOutput.WriteLine(string.Format("Successes: {0:n0} ({1}) ", successFrequency, (successFrequency / totalCount).ToString("#0.0000%")));
-			//TextOutput.WriteLine(string.Format("Failures:  {0:n0} ({1}) ", totalCount - successFrequency, ((totalCount - successFrequency) / totalCount).ToString("#0.0000%")));
+			results.advantage = advantageFrequency;
+			results.threat = threatFrequency;
+			results.stalemate = results.count - (advantageFrequency + threatFrequency);
+
+			results.triumph = triumphFrequency;
+			results.despair = despairFrequency;
 		}
 
-		protected void ProcessAdvantagePool(Dictionary<FaceMap, long> outcomePool)
-		{
-			//string format = "| {0,9:#0} | {1,11} | {2}";
-
-			//TextOutput.WriteLine();
-			//Console.WriteLine("Breakdown of Advantage");
-			//TextOutput.WriteLine("----------------------");
-
-			long successFrequency = 0;
-			long failureFrequency = 0;
-
-			//loop through the simple pool to find matches
-			foreach (FaceMap map in outcomePool.Keys)
-			{
-				int successThreshold = 0;
-				int failureThreshold = 0;
-
-				//if it finds a matching key increase the threshold
-				if (map.faces.ContainsKey(Face.advantage))
-					successThreshold += map.faces[Face.advantage];
-
-				//if it finds a matching key increase the threshold
-				if (map.faces.ContainsKey(Face.threat))
-					failureThreshold += map.faces[Face.threat];
-
-				//if the found threshold is the same as the required threshold add the frequency and display the roll result
-				if (successThreshold > 0 && successThreshold > failureThreshold)
-				{
-					successFrequency += outcomePool[map];
-					//Console.WriteLine(string.Format(format, outcomePool[map], (outcomePool[map] / totalCount).ToString("#0.0%"), map.ToString()));
-				}
-				else if (failureThreshold > successThreshold)
-				{
-					failureFrequency += outcomePool[map];
-				}
-			}
-
-			results.advantage = successFrequency;
-			results.threat = failureFrequency;
-			results.stalemate = results.count - (successFrequency + failureFrequency);
-
-			//TextOutput.WriteLine(string.Format("Advantage: {0:n0} ({1}) ", successFrequency, (successFrequency / totalCount).ToString("#0.0000%")));
-			//TextOutput.WriteLine(string.Format("Null:  {0:n0} ({1}) ", totalCount - (successFrequency + failureFrequency), ((totalCount - (successFrequency + failureFrequency)) / totalCount).ToString("#0.0000%")));
-			//TextOutput.WriteLine(string.Format("Threat:  {0:n0} ({1}) ", failureFrequency, (failureFrequency / totalCount).ToString("#0.0000%")));
-		}
 	}
 }

@@ -75,34 +75,11 @@ namespace DiceCalculator
 			for (int i = 0; i < challenge; i++)
 				testPool.Add(new Challenge());
 
-			var poolText = testPool.GroupBy(info => info.ToString()).Select(group => string.Format("{0} {1}", group.Key, group.Count())).ToList();
-			Console.WriteLine(string.Format("Pool: {0}", string.Join(", ", poolText)));
+			//var poolText = testPool.GroupBy(info => info.ToString()).Select(group => string.Format("{0} {1}", group.Key, group.Count())).ToList();
+			//Console.WriteLine(string.Format("Pool: {0}", string.Join(", ", poolText)));
 
 			return testPool;
 		}
-
-		public static void LargeTest()
-		{
-			BreakdownCalculator diceCalculator = new BreakdownCalculator(new List<Die>()
-			{
-				new Boost(),
-				new Boost(),
-				new Boost(),
-				new Boost(),
-				new Boost(),//5
-				new Ability(),
-				new Ability(),
-				new Difficulty(),
-				new Difficulty(),
-				new Difficulty(),//10
-				new Difficulty(),
-				new SetBack(),
-				new SetBack(),
-				new SetBack(),
-				new SetBack()
-				});
-		}
-
 
 		public static void MatchTest()
 		{
