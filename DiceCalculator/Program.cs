@@ -53,8 +53,9 @@ namespace DiceCalculator
 				}
 			}
 
-			writer.WriteLine("pool, total, successes, failures, advantages, threats, stalemate, triumphs, despairs");
+			writer.WriteLine("pool,total,unique,successes,%,failures,%,advantages,%,threats,%,stalemate,%,triumphs,%,despairs,%");
 			writer.WriteLine(string.Format("{0}", string.Join("\n", resultList)));
+			writer.WriteLine();
 
 			writer.Close();
 		}

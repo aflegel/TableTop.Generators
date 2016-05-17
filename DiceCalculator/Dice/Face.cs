@@ -26,11 +26,20 @@ namespace DiceCalculator.Dice
 	{
 		public override string ToString()
 		{
-			return string.Format("\"{0}\", {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}", dice, count, success, failure, advantage, threat, stalemate, triumph, despair);
+			return string.Format("\"{0}\",{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12},{13},{14},{15},{16}",
+				dice, count, unique,
+				success, success / (decimal)count,
+				failure, failure / (decimal)count,
+				advantage, advantage / (decimal)count,
+				threat, threat / (decimal)count,
+				stalemate, stalemate / (decimal)count,
+				triumph, triumph / (decimal)count,
+				despair, despair / (decimal)count);
 		}
 
 		public string dice;
 		public long count;
+		public long unique;
 		public long success;
 		public long failure;
 		public long advantage;

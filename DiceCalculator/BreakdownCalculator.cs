@@ -24,17 +24,15 @@ namespace DiceCalculator
 		{
 			results = new DieResult();
 
-			ProcessPreOutput(dicePool);
+			ProcessPreOutput();
 
-			Dictionary<FaceMap, long> outcomePool = ProcessDicePool(dicePool);
+			Dictionary<FaceMap, long> outcomePool = ProcessDicePool();
 
 			ProcessMainOutput(outcomePool);
 
 			//ProcessAnalysisOutput(outcomePool, dicePool);
 
 			SummarizePool(outcomePool);
-			ProcessAdvantagePool(outcomePool);
-			ProcessTriumphPool(outcomePool);
 
 			return results;
 		}
@@ -43,16 +41,20 @@ namespace DiceCalculator
 		///
 		/// </summary>
 		/// <param name="dicePool"></param>
-		protected void ProcessPreOutput(List<Die> dicePool)
+		protected void ProcessPreOutput()
 		{
 			var rollEstimation = dicePool.Aggregate((long)1, (x, y) => x * y.faceMaps.Count);
 			var poolText = dicePool.GroupBy(info => info.ToString()).Select(group => string.Format("{0} {1}", group.Key, group.Count()) ).ToList();
 
 			//update the user
-			Console.WriteLine(string.Format("Pool: {0} | Outcomes: {1} ", string.Join(", ", poolText), rollEstimation));
+			Console.WriteLine(string.Format("Pool: {0} | Outcomes: {1:n0} ", string.Join(", ", poolText), rollEstimation));
 		}
 
-		protected Dictionary<FaceMap, long> ProcessDicePool(List<Die> dicePool)
+		protected void ProcessPostOutput()
+		{
+		}
+
+		protected Dictionary<FaceMap, long> ProcessDicePool()
 		{
 
 			Dictionary<FaceMap, long> bulkPool = new Dictionary<FaceMap, long>();
@@ -86,24 +88,24 @@ namespace DiceCalculator
 		}
 
 
-		protected Dictionary<FaceMap, long> ProcessPartialDicePool(List<Die> dicePool)
+		protected Dictionary<FaceMap, long> ProcessPartialDicePool(List<Die> partialDicePool)
 		{
-			int[] indexTracker = new int[dicePool.Count];
-			for (int i = 0; i < dicePool.Count; i++)
+			int[] indexTracker = new int[partialDicePool.Count];
+			for (int i = 0; i < partialDicePool.Count; i++)
 				indexTracker[i] = 0;
 
 			Dictionary<FaceMap, long> bulkPool = new Dictionary<FaceMap, long>();
 
-			while (indexTracker[dicePool.Count - 1] < dicePool[dicePool.Count - 1].faceMaps.Count)
+			while (indexTracker[partialDicePool.Count - 1] < partialDicePool[partialDicePool.Count - 1].faceMaps.Count)
 			{
-				for (int i = 0; i < dicePool[0].faceMaps.Count; i++)
+				for (int i = 0; i < partialDicePool[0].faceMaps.Count; i++)
 				{
 					//add the zero index to the mix
-					FaceMap node = dicePool[0].faceMaps[i];
+					FaceMap node = partialDicePool[0].faceMaps[i];
 
-					for (int j = 1; j < dicePool.Count; j++)
+					for (int j = 1; j < partialDicePool.Count; j++)
 					{
-						node = node.Merge(dicePool[j].faceMaps[indexTracker[j]]);
+						node = node.Merge(partialDicePool[j].faceMaps[indexTracker[j]]);
 					}
 
 					//add the node to the mix
@@ -121,17 +123,17 @@ namespace DiceCalculator
 				}
 
 				//manually update the next index
-				if (dicePool.Count > 1)
+				if (partialDicePool.Count > 1)
 					indexTracker[1]++;
 				else
-					indexTracker[0] = dicePool[0].faceMaps.Count;
+					indexTracker[0] = partialDicePool[0].faceMaps.Count;
 
 				//update the indexes
-				for (int i = 1; i < dicePool.Count; i++)
+				for (int i = 1; i < partialDicePool.Count; i++)
 				{
-					if (indexTracker[i] >= dicePool[i].faceMaps.Count)
+					if (indexTracker[i] >= partialDicePool[i].faceMaps.Count)
 					{
-						if (i < dicePool.Count - 1)
+						if (i < partialDicePool.Count - 1)
 						{
 							indexTracker[i] = 0;
 							indexTracker[i + 1]++;
@@ -185,6 +187,7 @@ namespace DiceCalculator
 
 			results.dice = string.Join(", ", poolText);
 			results.count = outcomePool.Sum(s => s.Value);
+			results.unique = outcomePool.Count;
 			totalCount = results.count;
 		}
 
@@ -350,11 +353,11 @@ namespace DiceCalculator
 
 				//if it finds a matching key increase the threshold
 				if (map.faces.ContainsKey(Face.triumph))
-					triumphFrequency += map.faces[Face.triumph];
+					triumphFrequency += outcomePool[map];
 
 				//if it finds a matching key increase the threshold
 				if (map.faces.ContainsKey(Face.despair))
-					despairFrequency += map.faces[Face.despair];
+					despairFrequency += outcomePool[map];
 			}
 
 			results.success = successFrequency;
