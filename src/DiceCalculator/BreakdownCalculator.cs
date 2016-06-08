@@ -18,6 +18,8 @@ namespace DiceCalculator
 		public BreakdownCalculator(List<Die> testingDice)
 		{
 			dicePool = testingDice;
+
+			//todo: create PoolMaster and PoolPart records
 		}
 
 		public DieResult Run()
@@ -293,6 +295,8 @@ namespace DiceCalculator
 		/// <param name="outcomePool"></param>
 		protected void SummarizePool(Dictionary<FaceMap, long> outcomePool)
 		{
+			//todo: create PoolMaster record
+
 			List<Face> successKeys = new List<Face>() { Face.success, Face.triumph };
 			List<Face> failureKeys = new List<Face>() { Face.failure, Face.despair };
 
@@ -306,6 +310,9 @@ namespace DiceCalculator
 			//loop through the simple pool to find matches
 			foreach (FaceMap map in outcomePool.Keys)
 			{
+				//todo: create RollPart record
+
+
 				int successThreshold = 0;
 				int failureThreshold = 0;
 
@@ -359,6 +366,8 @@ namespace DiceCalculator
 				if (map.faces.ContainsKey(Face.despair))
 					despairFrequency += outcomePool[map];
 			}
+
+			//todo: Update PoolMaster record
 
 			results.success = successFrequency;
 			results.failure = results.count - successFrequency;

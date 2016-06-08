@@ -1,14 +1,15 @@
-﻿{
-	"userSecretsId": "aspnet5-TableTopGenerators-b7b90754-2a3b-4d6d-b542-b978874c2632",
-	"version": "1.0.0-*",
+{
+	"commands": {
+		"web": "Microsoft.AspNet.Server.Kestrel",
+		"ef": "EntityFramework.Commands"
+	},
 	"compilationOptions": {
 		"emitEntryPoint": true
 	},
-
 	"dependencies": {
 		"EntityFramework.Commands": "7.0.0-rc1-final",
 		"EntityFramework.MicrosoftSqlServer": "7.0.0-rc1-final",
-		"Microsoft.ApplicationInsights.AspNet": "1.0.0-rc1",
+		"Microsoft.ApplicationInsights.AspNet": "1.0.0-rc1-update4",
 		"Microsoft.AspNet.Authentication.Cookies": "1.0.0-rc1-final",
 		"Microsoft.AspNet.Diagnostics.Entity": "7.0.0-rc1-final",
 		"Microsoft.AspNet.Identity.EntityFramework": "3.0.0-rc1-final",
@@ -20,33 +21,25 @@
 		"Microsoft.AspNet.Tooling.Razor": "1.0.0-rc1-final",
 		"Microsoft.Extensions.CodeGenerators.Mvc": "1.0.0-rc1-final",
 		"Microsoft.Extensions.Configuration.FileProviderExtensions": "1.0.0-rc1-final",
-		"Microsoft.Extensions.Configuration.Json": "1.0.0-rc1-final",
-		"Microsoft.Extensions.Configuration.UserSecrets": "1.0.0-rc1-final",
-		"Microsoft.Extensions.Logging": "1.0.0-rc1-final",
-		"Microsoft.Extensions.Logging.Console": "1.0.0-rc1-final",
-		"Microsoft.Extensions.Logging.Debug": "1.0.0-rc1-final",
-		"Microsoft.VisualStudio.Web.BrowserLink.Loader": "14.0.0-rc1-final"
+		"Microsoft.Extensions.Configuration.Json": "1.0.0-rc2-final",
+		"Microsoft.Extensions.Logging": "1.0.0-rc2-final",
+		"Microsoft.NETCore.App": "1.0.0-rc2-3002702"
 	},
-
-	"commands": {
-		"web": "Microsoft.AspNet.Server.Kestrel",
-		"ef": "EntityFramework.Commands"
-	},
-
-	"frameworks": {
-		"dnx452": { },
-		"dnxcore50": { }
-	},
-
 	"exclude": [
 		"wwwroot",
 		"node_modules"
 	],
+	"frameworks": {
+		"dnx452": { },
+		"dnxcore50": { }
+	},
 	"publishExclude": [
 		"**.user",
 		"**.vspscc"
 	],
 	"scripts": {
 		"prepublish": [ "npm install", "bower install", "gulp clean", "gulp min" ]
-	}
+	},
+	"userSecretsId": "aspnet5-TableTopGenerators-b7b90754-2a3b-4d6d-b542-b978874c2632",
+	"version": "1.0.0-*"
 }

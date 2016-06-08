@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.IO;
-using System.Text;
 using System.Threading.Tasks;
-using DiceCalculator.Dice;
-using System.Web.Mvc;
 
 namespace DiceCalculator
 {
@@ -15,6 +11,8 @@ namespace DiceCalculator
 		const int UPGRADE_LIMIT = 4;
 		const int DIFFICULTY_LIMIT = 6;
 		const int CHALLENGE_LIMIT = 4;
+		const int BOOST_LIMIT = 2;
+		const int SETBACK_LIMIT = 2;
 
 		static void Main(string[] args)
 		{
@@ -45,9 +43,15 @@ namespace DiceCalculator
 						//ensure the proficiency dice don't outweigh the ability dice
 						for (int l = 0; (l <= CHALLENGE_LIMIT) && (l <= k); l++)
 						{
-							List<Die> pool = GetPool(i - j, j, k - l, l);
-							BreakdownCalculator calculator = new BreakdownCalculator(pool);
-							resultList.Add(calculator.Run());
+							for (int m = 0; m < BOOST_LIMIT; m++)
+							{
+								for (int n = 0; n < SETBACK_LIMIT; n++)
+								{
+									List<Die> pool = GetPool(i - j, j, k - l, l, m, n);
+									BreakdownCalculator calculator = new BreakdownCalculator(pool);
+									resultList.Add(calculator.Run());
+								}
+							}
 						}
 					}
 				}
@@ -60,7 +64,7 @@ namespace DiceCalculator
 			writer.Close();
 		}
 
-		protected static List<Die> GetPool(int ability, int proficiency, int difficulty, int challenge)
+		protected static List<Die> GetPool(int ability, int proficiency, int difficulty, int challenge, int boost, int setback)
 		{
 			List<Die> testPool = new List<Die>();
 
@@ -75,6 +79,12 @@ namespace DiceCalculator
 
 			for (int i = 0; i < challenge; i++)
 				testPool.Add(new Challenge());
+
+			for (int i = 0; i < boost; i++)
+				testPool.Add(new Boost());
+
+			for (int i = 0; i < setback; i++)
+				testPool.Add(new SetBack());
 
 			//var poolText = testPool.GroupBy(info => info.ToString()).Select(group => string.Format("{0} {1}", group.Key, group.Count())).ToList();
 			//Console.WriteLine(string.Format("Pool: {0}", string.Join(", ", poolText)));

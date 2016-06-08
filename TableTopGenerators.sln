@@ -14,6 +14,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "EclipsePhase", "src\TableTopGenerators\EclipsePhase.xproj", "{D1C63F0A-E6CF-458F-9381-072CC15B5102}"
 EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "DiceCalculator", "src\DiceCalculator\DiceCalculator.xproj", "{9EB28C7F-49EF-42FC-BA41-1EB9FB262A0C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,11 +26,16 @@ Global
 		{D1C63F0A-E6CF-458F-9381-072CC15B5102}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D1C63F0A-E6CF-458F-9381-072CC15B5102}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D1C63F0A-E6CF-458F-9381-072CC15B5102}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9EB28C7F-49EF-42FC-BA41-1EB9FB262A0C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9EB28C7F-49EF-42FC-BA41-1EB9FB262A0C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9EB28C7F-49EF-42FC-BA41-1EB9FB262A0C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9EB28C7F-49EF-42FC-BA41-1EB9FB262A0C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{D1C63F0A-E6CF-458F-9381-072CC15B5102} = {7944C371-40C1-49D9-8528-906B1643D78B}
+		{9EB28C7F-49EF-42FC-BA41-1EB9FB262A0C} = {7944C371-40C1-49D9-8528-906B1643D78B}
 	EndGlobalSection
 EndGlobal
